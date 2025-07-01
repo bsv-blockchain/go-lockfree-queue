@@ -380,12 +380,12 @@ make bench
 
 ### Benchmark Results
 
-| Benchmark                           | Iterations | ns/op | B/op | allocs/op |
-|-------------------------------------|------------|------:|-----:|----------:|
-| [Greet](template_benchmark_test.go) | 21,179,739 | 56.59 |   40 |         2 |
+| Benchmark                                        | Iterations | ns/op | B/op | allocs/op |
+|--------------------------------------------------|------------|------:|-----:|----------:|
+| [LockFreeQ](lock_free_queue_benchmark_test.go)   | 15076060   | 73.92 |   16 |         1 |
 
 > These benchmarks reflect fast, allocation-free lookups for most retrieval functions, ensuring optimal performance in production environments.
-> Performance benchmarks for the core functions in this library, executed on an Apple M1 Max (ARM64).
+> Performance benchmarks for the core functions in this library, executed on an 13th Gen Intel i7-1360P (AMD64).
 
 <br/>
 
