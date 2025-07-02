@@ -91,6 +91,8 @@
 ## 🧩 What's Inside
 Library for Lock Free Queue capabilities. A Lock Free Queue is a FIFO structure with operations to enqueue and dequeue generic values.
 
+<br/>
+
 ## 📦 Installation
 
 **go-lockfree-queue** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
