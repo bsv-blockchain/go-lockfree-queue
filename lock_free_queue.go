@@ -28,22 +28,52 @@ func NewLockFreeQ[T any]() *LockFreeQ[T] {
 	}
 }
 
-// Enqueue adds a series of Request to the queue
-// Enqueue is thread safe; it uses atomic operations to add to the queue
+// Enqueue adds a value to the end of the queue in a lock-free, thread-safe manner.
+//
+// This method performs the following steps:
+// - Allocates a new node containing the provided value
+// - Atomically swaps the queue's tail pointer to the new node
+//   - If the queue was empty, links the head to the new node
+//   - Otherwise, links the previous tail's next pointer to the new node
+//
+// Parameters:
+// - v: the value to enqueue; may be any type supported by the generic parameter T
+//
+// Returns:
+// - None
+//
+// Side Effects:
+// - Mutates the internal state of the queue by appending a new node
+// - Uses atomic operations to ensure thread safety for concurrent enqueues
 func (q *LockFreeQ[T]) Enqueue(v T) {
-	node := &node[T]{value: v}
-	prev := q.tail.Swap(node)
+	newNode := &node[T]{value: v}
+	prev := q.tail.Swap(newNode)
 
 	if prev == nil {
-		q.head.next.Store(node)
+		q.head.next.Store(newNode)
 		return
 	}
 
-	prev.next.Store(node)
+	prev.next.Store(newNode)
 }
 
-// Dequeue removes a Request from the queue
-// Dequeue is not thread safe, it should only be called from a single thread !!!
+// Dequeue removes and returns the value at the front of the queue in a lock-free queue.
+//
+// This method performs the following steps:
+// - Loads the next node after the current head
+//   - If the next node is nil, the queue is empty and nil is returned
+//   - Otherwise, advances the head pointer to the next node
+//
+// - Returns a pointer to the value stored in the dequeued node
+//
+// Parameters:
+// - None
+//
+// Returns:
+// - Pointer to the value of type T at the front of the queue, or nil if the queue is empty
+//
+// Side Effects:
+// - Mutates the internal state of the queue by advancing the head pointer
 func (q *LockFreeQ[T]) Dequeue() *T {
 	next := q.head.next.Load()
 
@@ -56,7 +86,21 @@ func (q *LockFreeQ[T]) Dequeue() *T {
 	return &next.value
 }
 
-// IsEmpty determines if the queue is empty
+// IsEmpty reports whether the queue contains any elements.
+//
+// This method performs the following steps:
+// - Loads the next node after the current head
+//   - If the next node is nil, the queue is empty
+//   - Otherwise, the queue contains at least one element
+//
+// Parameters:
+// - None
+//
+// Returns:
+// - true if the queue is empty; false otherwise
+//
+// Side Effects:
+// - None
 func (q *LockFreeQ[T]) IsEmpty() bool {
 	return q.head.next.Load() == nil
 }
