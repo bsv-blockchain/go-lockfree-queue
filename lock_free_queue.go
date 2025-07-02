@@ -29,7 +29,7 @@ func NewLockFreeQ[T any]() *LockFreeQ[T] {
 }
 
 // Enqueue adds a series of Request to the queue
-// Enqueue is thread safe, it uses atomic operations to add to the queue
+// Enqueue is thread safe; it uses atomic operations to add to the queue
 func (q *LockFreeQ[T]) Enqueue(v T) {
 	node := &node[T]{value: v}
 	prev := q.tail.Swap(node)
