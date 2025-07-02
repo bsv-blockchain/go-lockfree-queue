@@ -4,8 +4,6 @@ include .make/common.mk
 # Common Golang makefile commands & variables between projects
 include .make/go.mk
 
-# Temporary makefile for initializing a new Go project template (remove this!)
-
 ## Set default repository details if not provided
 REPO_NAME  ?= go-lockfree-queue
 REPO_OWNER ?= bsv-blockchain
