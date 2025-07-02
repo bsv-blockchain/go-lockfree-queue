@@ -306,7 +306,11 @@ make bench
 
 | Benchmark                                        | Iterations | ns/op | B/op | allocs/op |
 |--------------------------------------------------|------------|------:|-----:|----------:|
-| [LockFreeQ](lock_free_queue_benchmark_test.go)   | 15076060   | 73.92 |   16 |         1 |
+| [LockFreeQ](lock_free_queue_benchmark_test.go)   | 24752019   | 79.73 |   16 |         1 |
+| [NewLockFreeQ](lock_free_queue_benchmark_test.go) | 1000000000 | 0.29 |    0 |         0 |
+| [LockFreeQ_Enqueue](lock_free_queue_benchmark_test.go) | 25041442 | 49.18 |   16 |         1 |
+| [LockFreeQ_Dequeue](lock_free_queue_benchmark_test.go) | 338000521 | 11.14 |    0 |         0 |
+| [LockFreeQ_IsEmpty](lock_free_queue_benchmark_test.go) | 1000000000 | 0.60 |    0 |         0 |
 
 > These benchmarks reflect fast, allocation-free lookups for most retrieval functions, ensuring optimal performance in production environments.
 > Performance benchmarks for the core functions in this library, executed on a 13th Gen Intel i7-1360P (AMD64).
