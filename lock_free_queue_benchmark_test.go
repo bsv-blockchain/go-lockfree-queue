@@ -24,16 +24,16 @@ func BenchmarkNewLockFreeQ(b *testing.B) {
 	}
 }
 
-// BenchmarkLockFreeQ_Enqueue benchmarks adding items to the queue.
-func BenchmarkLockFreeQ_Enqueue(b *testing.B) {
+// BenchmarkLockFreeQEnqueue benchmarks adding items to the queue.
+func BenchmarkLockFreeQEnqueue(b *testing.B) {
 	q := NewLockFreeQ[int]()
 	for i := 0; i < b.N; i++ {
 		q.Enqueue(i)
 	}
 }
 
-// BenchmarkLockFreeQ_Dequeue benchmarks removing items from the queue.
-func BenchmarkLockFreeQ_Dequeue(b *testing.B) {
+// BenchmarkLockFreeQDequeue benchmarks removing items from the queue.
+func BenchmarkLockFreeQDequeue(b *testing.B) {
 	q := NewLockFreeQ[int]()
 	for i := 0; i < b.N; i++ {
 		q.Enqueue(i)
@@ -46,8 +46,8 @@ func BenchmarkLockFreeQ_Dequeue(b *testing.B) {
 	}
 }
 
-// BenchmarkLockFreeQ_IsEmpty benchmarks the IsEmpty check.
-func BenchmarkLockFreeQ_IsEmpty(b *testing.B) {
+// BenchmarkLockFreeQIsEmpty benchmarks the IsEmpty check.
+func BenchmarkLockFreeQIsEmpty(b *testing.B) {
 	q := NewLockFreeQ[int]()
 	for i := 0; i < b.N; i++ {
 		_ = q.IsEmpty()
