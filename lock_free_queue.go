@@ -6,6 +6,7 @@ import (
 	"sync/atomic"
 )
 
+// node represents a single element in the lock-free queue.
 type node[T any] struct {
 	value T
 	next  atomic.Pointer[node[T]]
