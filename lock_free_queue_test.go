@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TestEnqueueDequeue tests the basic functionality of the lock-free queue
 func TestEnqueueDequeue(t *testing.T) {
 	q := NewLockFreeQ[int]() // Assuming your LockFreeQ works with int for this example
 
@@ -15,19 +16,24 @@ func TestEnqueueDequeue(t *testing.T) {
 	q.Enqueue(2)
 
 	// Dequeue and check elements
-	if val := q.Dequeue(); val == nil || *val != 1 {
-		t.Errorf("Expected 1, got %v", val)
+	val := q.Dequeue()
+	assert.NotNil(t, val, "Expected 1, got nil")
+	if val != nil {
+		assert.Equal(t, 1, *val, "Expected 1, got %v", *val)
 	}
 
-	if val := q.Dequeue(); val == nil || *val != 2 {
-		t.Errorf("Expected 2, got %v", val)
+	val = q.Dequeue()
+	assert.NotNil(t, val, "Expected 2, got nil")
+	if val != nil {
+		assert.Equal(t, 2, *val, "Expected 2, got %v", *val)
 	}
 
-	// Check if queue is empty
+	// Check if the queue is empty
 	assert.True(t, q.IsEmpty(), "Expected queue to be empty after dequeuing all elements")
 	assert.Nil(t, q.Dequeue())
 }
 
+// TestConcurrentEnqueue tests concurrent enqueuing into the lock-free queue
 func TestConcurrentEnqueue(t *testing.T) {
 	q := NewLockFreeQ[int]()
 
@@ -57,18 +63,13 @@ func TestConcurrentEnqueue(t *testing.T) {
 
 	for i := 0; i < numWorkers*numEnqueues; i++ {
 		val := q.Dequeue()
-		if val == nil {
-			t.Fatalf("Expected a value, got nil at iteration %d", i)
-		}
-
-		if seen[*val] {
-			t.Errorf("Duplicate value detected: %v", *val)
-		}
+		assert.NotNil(t, val, "Expected a value, got nil at iteration %d", i)
+		assert.False(t, seen[*val], "Duplicate value detected: %v", *val)
 
 		seen[*val] = true
 	}
 
 	if !q.IsEmpty() {
-		t.Errorf("Expected queue to be empty after all dequeues")
+		assert.Fail(t, "Expected queue to be empty after all dequeues")
 	}
 }

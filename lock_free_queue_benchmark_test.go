@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// BenchmarkLockFreeQueue benchmarks the lock-free queue's enqueue and dequeue operations
 func BenchmarkLockFreeQueue(b *testing.B) {
 	q := NewLockFreeQ[int]()
 
