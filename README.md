@@ -199,7 +199,6 @@ govulncheck-install   ## Install govulncheck
 help                  ## Display this help message
 install-go            ## Install using go install with specific version
 install-releaser      ## Install GoReleaser
-install-template      ## Kick-start a fresh copy of go-lockfree-queue (run once!)
 install               ## Install the application binary
 lint                  ## Run the golangci-lint application (install if not found)
 release-snap          ## Build snapshot binaries
