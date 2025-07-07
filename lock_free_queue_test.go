@@ -18,12 +18,14 @@ func TestEnqueueDequeue(t *testing.T) {
 	// Dequeue and check elements
 	val := q.Dequeue()
 	assert.NotNil(t, val, "Expected 1, got nil")
+
 	if val != nil {
 		assert.Equal(t, 1, *val, "Expected 1, got %v", *val)
 	}
 
 	val = q.Dequeue()
 	assert.NotNil(t, val, "Expected 2, got nil")
+
 	if val != nil {
 		assert.Equal(t, 2, *val, "Expected 2, got %v", *val)
 	}

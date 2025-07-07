@@ -10,6 +10,7 @@ func BenchmarkLockFreeQueue(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		q.Enqueue(i)
 	}
+
 	for i := 0; i < b.N; i++ {
 		if val := q.Dequeue(); val == nil {
 			b.Errorf("Expected a value, got nil at iteration %d", i)
@@ -38,7 +39,9 @@ func BenchmarkLockFreeQDequeue(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		q.Enqueue(i)
 	}
+
 	b.ResetTimer()
+
 	for i := 0; i < b.N; i++ {
 		if q.Dequeue() == nil {
 			b.Errorf("expected a value at iteration %d", i)
