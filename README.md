@@ -30,8 +30,8 @@
         <a href="https://goreportcard.com/report/github.com/bsv-blockchain/go-lockfree-queue">
           <img src="https://goreportcard.com/badge/github.com/bsv-blockchain/go-lockfree-queue?style=flat" alt="Go Report Card">
         </a><br/>
-		<a href="https://codecov.io/gh/bsv-blockchain/go-lockfree-queue">
-          <img src="https://codecov.io/gh/bsv-blockchain/go-lockfree-queue/branch/master/graph/badge.svg?style=flat&token=iBdJQpOej9" alt="Code Coverage">
+		<a href="https://codecov.io/gh/bsv-blockchain/go-lockfree-queue/tree/master">
+          <img src="https://codecov.io/gh/bsv-blockchain/go-lockfree-queue/branch/master/graph/badge.svg?style=flat" alt="Code Coverage">
         </a><br/>
 		<a href="https://scorecard.dev/viewer/?uri=github.com/bsv-blockchain/go-lockfree-queue">
           <img src="https://api.scorecard.dev/projects/github.com/bsv-blockchain/go-lockfree-queue/badge?logo=springsecurity&logoColor=white" alt="OpenSSF Scorecard">
@@ -233,9 +233,7 @@ vet                   ## Run go vet
 | Workflow Name                                                                | Description                                                                                                                 |
 |------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
 | [auto-merge-on-approval.yml](.github/workflows/auto-merge-on-approval.yml)   | Automatically merges PRs after approval and all required checks, following strict rules.                                    |
-| [clean-runner-cache.yml](.github/workflows/clean-runner-cache.yml)           | Removes GitHub Actions caches tied to closed pull requests.                                                                 |
 | [codeql-analysis.yml](.github/workflows/codeql-analysis.yml)                 | Analyzes code for security vulnerabilities using [GitHub CodeQL](https://codeql.github.com/).                               |
-| [delete-merged-branches.yml](.github/workflows/delete-merged-branches.yml)   | Deletes feature branches after their pull requests are merged.                                                              |
 | [dependabot-auto-merge.yml](.github/workflows/dependabot-auto-merge.yml)     | Automatically merges [Dependabot](https://github.com/dependabot) PRs that meet all requirements.                            |
 | [pull-request-management.yml](.github/workflows/pull-request-management.yml) | Labels PRs by branch prefix, assigns a default user if none is assigned, and welcomes new contributors with a comment.      |
 | [release.yml](.github/workflows/release.yml)                                 | Builds and publishes releases via [GoReleaser](https://goreleaser.com/intro/) when a semver tag is pushed.                  |
