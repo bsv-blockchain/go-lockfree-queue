@@ -60,8 +60,8 @@ repos:
         types: [go, markdown]
         pass_filenames: true
         additional_dependencies:
-          - regex==2025.6
-          - ruamel.yaml==0.18
+          - regex==2024.11.6
+          - ruamel.yaml==0.18.18
 
   # --------------------- Commit‑msg validation -----------------------
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
