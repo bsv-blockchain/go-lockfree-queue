@@ -37,7 +37,7 @@ repos:
 
   # ------------------------ Security scans ---------------------------
   - repo: https://github.com/zricethezav/gitleaks
-    rev: 39fdb480a06768cc41a84ef86959c07ff33091c4  # frozen: v8.28.0
+    rev: 39fdb480a06768cc41a84ef86959c07ff33091c4 # frozen: v8.28.0
     hooks:
       - id: gitleaks
         stages: [pre-commit, pre-push]
