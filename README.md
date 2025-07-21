@@ -20,7 +20,7 @@
           <img src="https://img.shields.io/github/actions/workflow/status/bsv-blockchain/go-lockfree-queue/fortress.yml?branch=master&logo=github&style=flat" alt="Build Status">
         </a><br/>
 		<a href="https://github.com/bsv-blockchain/go-lockfree-queue/actions">
-          <img src="https://github.com/bsv-blockchain/go-lockfree-queue/actions/workflows/codeql-analysis.yml/badge.svg?style=flat" alt="CodeQL">
+          <img src="https://github.com/bsv-blockchain/go-lockfree-queue/actions/workflows/codeql-analysis.yml/badge.svg?style=flat&v=1" alt="CodeQL">
         </a><br/>
 		<a href="https://sonarcloud.io/project/overview?id=bsv-blockchain_go-lockfree-queue">
           <img src="https://sonarcloud.io/api/project_badges/measure?project=bsv-blockchain_go-lockfree-queue&metric=alert_status&style-flat" alt="SonarCloud">
