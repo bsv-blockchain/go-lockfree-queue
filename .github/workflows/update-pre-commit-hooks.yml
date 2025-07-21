@@ -260,6 +260,10 @@ jobs:
           echo "📦 Running pre-commit autoupdate --freeze..."
           pre-commit autoupdate --freeze
 
+          # Fix YAML formatting - ensure single space before frozen comments
+          echo "🔧 Fixing YAML formatting for prettier compliance..."
+          sed -i 's/  # frozen:/ # frozen:/g' "${{ env.CONFIG_FILE }}"
+
           # Migrate config if needed
           echo "🔧 Running config migration..."
           pre-commit migrate-config
