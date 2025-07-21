@@ -131,7 +131,7 @@ jobs:
           # Create unique branch name with timestamp to avoid conflicts
           TIMESTAMP=$(date -u +%Y%m%d-%H%M)
           UNIQUE_BRANCH_NAME="${BRANCH_NAME}-${TIMESTAMP}"
-          
+
           # Set as environment variables for all subsequent steps
           echo "BRANCH_NAME=$UNIQUE_BRANCH_NAME" >> $GITHUB_ENV
           echo "BASE_BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
@@ -335,7 +335,7 @@ jobs:
           echo "🆕 Using unique branch: ${{ env.BRANCH_NAME }}"
           echo "branch_exists=false" >> $GITHUB_OUTPUT
           echo "pr_exists=false" >> $GITHUB_OUTPUT
-          
+
           # Check if there are other open PRs for pre-commit updates (for info only)
           existing_prs=$(gh pr list --head "${{ env.BASE_BRANCH_NAME }}*" --json number,title,headRefName --jq '.[] | select(.headRefName | startswith("${{ env.BASE_BRANCH_NAME }}")) | .number' || echo "")
           if [ -n "$existing_prs" ]; then
@@ -512,7 +512,6 @@ jobs:
 
         env:
           GH_TOKEN: ${{ secrets.GH_PAT_TOKEN || secrets.GITHUB_TOKEN }}
-
 
   # ----------------------------------------------------------------------------------
   # Generate Workflow Summary Report
