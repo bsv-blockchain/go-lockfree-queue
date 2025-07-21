@@ -359,8 +359,26 @@ jobs:
           # Create or switch to the branch
           if [ "${{ steps.check_branch.outputs.branch_exists }}" = "true" ]; then
             echo "🔄 Switching to existing branch..."
+            # Stash any local changes to avoid checkout conflicts
+            if ! git diff --quiet || ! git diff --cached --quiet; then
+              echo "💾 Stashing local changes..."
+              git stash push -m "Pre-commit workflow: temporary stash for branch checkout"
+              STASH_CREATED=true
+            else
+              STASH_CREATED=false
+            fi
+            
+            # Fetch and checkout the existing branch
             git fetch origin "${{ env.BRANCH_NAME }}"
             git checkout "${{ env.BRANCH_NAME }}"
+            
+            # Apply stashed changes if we created a stash
+            if [ "$STASH_CREATED" = "true" ]; then
+              echo "📤 Applying stashed changes..."
+              git stash pop || echo "⚠️ Stash pop failed - changes may need manual resolution"
+            fi
+            
+            # Merge with main to get latest changes
             git merge origin/main --no-edit || echo "⚠️ Merge conflicts may need manual resolution"
           else
             echo "🆕 Creating new branch..."
