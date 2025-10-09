@@ -46,7 +46,7 @@ Everything from commit rules to contributor expectations is in [AGENTS.md](./AGE
 ## 📬 Private Contact
 
 For sensitive or non-public concerns, reach out to:
-📧 [security@bsvassocation.org](mailto:security@bsvassocation.org)
+📧 [security@bsvassociation.org](mailto:security@bsvassociation.org)
 
 <br/>
 
