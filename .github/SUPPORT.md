@@ -1,6 +1,6 @@
 # 🛟 Support Guide
 
-Need help with **go-template**? You're in the right place. Here’s how to get support, report issues, and stay aligned with project guidelines.
+Need help with **go-lockfree-queue**? You're in the right place. Here’s how to get support, report issues, and stay aligned with project guidelines.
 
 <br/>
 
@@ -46,7 +46,7 @@ Everything from commit rules to contributor expectations is in [AGENTS.md](./AGE
 ## 📬 Private Contact
 
 For sensitive or non-public concerns, reach out to:
-📧 [security@bsvassocation.org](mailto:security@bsvassocation.org)
+📧 [go-lockfree-queue@mrz1818.com](mailto:go-lockfree-queue@mrz1818.com)
 
 <br/>
 
