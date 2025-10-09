@@ -1,6 +1,6 @@
 # 🔐 Security Policy
 
-Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-template**.
+Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-lockfree-queue**.
 
 <br/>
 

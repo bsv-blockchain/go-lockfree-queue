@@ -1,6 +1,6 @@
 # 🛟 Support Guide
 
-Need help with **go-template**? You're in the right place. Here’s how to get support, report issues, and stay aligned with project guidelines.
+Need help with **go-lockfree-queue**? You're in the right place. Here’s how to get support, report issues, and stay aligned with project guidelines.
 
 <br/>
 
