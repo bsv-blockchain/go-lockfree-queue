@@ -1,9 +1,9 @@
 # ────────────────────────────────────────────────────────────────
 # Dependabot Configuration
-# Repo: bsv-blockchain/<repo>
+# Repo: mrz1836/<repo>
 #
 # Purpose:
-#   • Keep Go modules, GitHub Actions, and DevContainer images/features
+#   • Keep Go modules, GitHub Actions, DevContainer images/features, and Docker
 #     base images up‑to‑date with zero‑day security patches and semantic‑version
 #     upgrades.
 #   • Reduce attack surface by limiting outdated dependencies.
@@ -49,7 +49,7 @@ updates:
           - "*oauth*"
         update-types: ["minor", "patch"]
     open-pull-requests-limit: 10
-    assignees: ["galt-tr", "mrz1836"]
+    assignees: ["mrz1836"]
     labels: ["chore", "dependencies", "gomod"]
     commit-message:
       prefix: "chore"
@@ -72,7 +72,7 @@ updates:
       ghactions-all:
         patterns: ["*"]
     open-pull-requests-limit: 10
-    assignees: ["galt-tr", "mrz1836"]
+    assignees: ["mrz1836"]
     labels: ["chore", "dependencies", "github-actions"]
     commit-message:
       prefix: "chore"
@@ -95,8 +95,34 @@ updates:
       devcontainer-all:
         patterns: ["*"]
     open-pull-requests-limit: 5
-    assignees: ["galt-tr", "mrz1836"]
+    assignees: ["mrz1836"]
     labels: ["chore", "dependencies", "devcontainer"]
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  # ──────────────────────────────────────────────────────────────
+  # 4. Dockerfiles (any Dockerfile in repo root or sub‑dirs)
+  # ──────────────────────────────────────────────────────────────
+  - package-ecosystem: "docker"
+    directory: "/"
+    target-branch: "master"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:45"
+      timezone: "America/New_York"
+    allow:
+      - dependency-type: "direct"
+    ignore:
+      - dependency-name: "alpine"
+      - dependency-name: "scratch"
+    groups:
+      dockerfiles-all:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+    assignees: ["mrz1836"]
+    labels: ["chore", "dependencies", "docker"]
     commit-message:
       prefix: "chore"
       include: "scope"

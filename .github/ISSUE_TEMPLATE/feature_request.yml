@@ -3,7 +3,7 @@ description: Suggest an idea or improvement for this project
 title: "[Feature] <brief description of feature>"
 labels: ["idea"]
 assignees:
-  - icellan
+  - mrz1836
 body:
   - type: textarea
     id: problem_description

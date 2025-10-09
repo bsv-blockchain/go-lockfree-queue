@@ -5,12 +5,12 @@
 #           for different update types (patch, minor, major) and dependency types
 #           (development, production). Security updates get special handling.
 #
-#  Configuration: All settings are loaded from .github/.env.shared for centralized
-#  management across all workflows.
+#  Configuration: All settings are loaded from .env.base and .env.custom files for
+#  centralized management across all workflows.
 #
 #  Triggers: Pull request events for immediate response to Dependabot PRs
 #
-#  Auto-merge Rules (configurable via .env.shared):
+#  Auto-merge Rules (configurable via .env.base/.env.custom):
 #  - Patch updates: Auto-merge by default
 #  - Minor dev dependencies: Auto-merge by default
 #  - Minor prod dependencies: Manual review by default
@@ -23,35 +23,32 @@
 
 name: Dependabot Auto-merge
 
-# ————————————————————————————————————————————————————————————————
+# --------------------------------------------------------------------
 # Trigger Configuration
-# ————————————————————————————————————————————————————————————————
+# --------------------------------------------------------------------
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
-# ————————————————————————————————————————————————————————————————
-# Permissions
-# ————————————————————————————————————————————————————————————————
+# Security: Restrictive default permissions with job-level overrides for least privilege access
 permissions:
   contents: read
-  pull-requests: read
 
-# ————————————————————————————————————————————————————————————————
+# --------------------------------------------------------------------
 # Concurrency Control
-# ————————————————————————————————————————————————————————————————
+# --------------------------------------------------------------------
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-# ————————————————————————————————————————————————————————————————
+# --------------------------------------------------------------------
 # Environment Variables
-# ————————————————————————————————————————————————————————————————
-# Note: Configuration variables are loaded from .github/.env.shared
+# --------------------------------------------------------------------
+# Note: Configuration variables are loaded from .env.base and .env.custom files
 
 jobs:
   # ----------------------------------------------------------------------------------
-  # Load Environment Variables from .env.shared
+  # Load Environment Variables
   # ----------------------------------------------------------------------------------
   load-env:
     name: 🌍 Load Environment Variables
@@ -61,19 +58,20 @@ jobs:
     outputs:
       env-json: ${{ steps.load-env.outputs.env-json }}
     steps:
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Check out code to access env file
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 📥 Checkout code (sparse)
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: |
-            .github/.env.shared
+            .github/.env.base
+            .github/.env.custom
             .github/actions/load-env
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Load and parse environment file
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🌍 Load environment variables
         uses: ./.github/actions/load-env
         id: load-env
@@ -86,9 +84,9 @@ jobs:
     needs: [load-env]
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
-      contents: write
-      issues: write
+      contents: write # Required for Dependabot PRs: Enables auto-merge (not needed for other PRs)
+      pull-requests: write # Required: Update and merge Dependabot PRs
+      issues: write # Required: Comment on related dependency issues
     outputs:
       dependency-names: ${{ steps.metadata.outputs.dependency-names }}
       update-type: ${{ steps.metadata.outputs.update-type }}
@@ -96,9 +94,9 @@ jobs:
       action-taken: ${{ steps.determine-action.outputs.action }}
 
     steps:
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Extract configuration from env-json
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🔧 Extract configuration
         id: config
         env:
@@ -120,7 +118,7 @@ jobs:
 
           # Validate required configuration
           if [[ -z "$MAINTAINER" ]] || [[ "$MAINTAINER" == "null" ]]; then
-            echo "❌ ERROR: DEPENDABOT_MAINTAINER_USERNAME not set in .env.shared" >&2
+            echo "❌ ERROR: DEPENDABOT_MAINTAINER_USERNAME not set in configuration" >&2
             exit 1
           fi
 
@@ -153,18 +151,18 @@ jobs:
             echo "  🔑 Token: Default GITHUB_TOKEN"
           fi
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Get official Dependabot metadata
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 📊 Fetch Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@08eff52bf64351f401fb50d4972fa95b9f2c2d1b # v2.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Log dependency information
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 📋 Log dependency details
         run: |
           echo "🔍 Analyzing Dependabot PR #${{ github.event.pull_request.number }}..."
@@ -176,9 +174,9 @@ jobs:
           echo "⬆️ Version: ${{ steps.metadata.outputs.previous-version }} → ${{ steps.metadata.outputs.new-version }}"
           echo "════════════════════════════════════════════════════════════════"
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Check if this is a security update
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🔒 Check for security update
         id: check-security
         env:
@@ -199,9 +197,9 @@ jobs:
             echo "ℹ️ Not a security update"
           fi
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Determine action based on configuration and update type
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🎯 Determine action
         id: determine-action
         run: |
@@ -256,9 +254,9 @@ jobs:
           echo "action=$ACTION" >> $GITHUB_OUTPUT
           echo "✅ Determined action: $ACTION"
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Handle major version alerts
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: ⚠️ Alert on major version bump
         if: steps.determine-action.outputs.action == 'alert-major' || steps.determine-action.outputs.action == 'alert-security-major'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
@@ -324,9 +322,9 @@ jobs:
               console.log('Major version alert already exists, skipping duplicate comment');
             }
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Handle minor production dependency alerts
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🔍 Alert on minor production dependency
         if: steps.determine-action.outputs.action == 'alert-minor-prod'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
@@ -376,9 +374,9 @@ jobs:
               });
             }
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Auto-merge approved updates
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🚀 Auto-merge approved updates
         if: |
           startsWith(steps.determine-action.outputs.action, 'auto-merge-')
@@ -388,6 +386,14 @@ jobs:
           ACTION="${{ steps.determine-action.outputs.action }}"
           DEPENDENCY="${{ steps.metadata.outputs.dependency-names }}"
           VERSION_CHANGE="${{ steps.metadata.outputs.previous-version }} → ${{ steps.metadata.outputs.new-version }}"
+
+          # Check token availability (use env var to avoid expanding secrets in run block)
+          # TOKEN_TYPE is passed as environment variable to indicate which token is being used
+          if [[ "$TOKEN_TYPE" == "PAT" ]]; then
+            echo "🔑 Using Personal Access Token for enhanced permissions"
+          else
+            echo "⚠️ Using default GITHUB_TOKEN - auto-merge may fail for Dependabot PRs"
+          fi
 
           # Determine approval message based on action type
           case "$ACTION" in
@@ -409,20 +415,34 @@ jobs:
           esac
 
           # Approve the PR
-          gh pr review --approve "$PR_URL" \
-            --body "$APPROVAL_MSG: $DEPENDENCY ($VERSION_CHANGE)"
+          echo "📝 Approving PR..."
+          if ! gh pr review --approve "$PR_URL" --body "$APPROVAL_MSG: $DEPENDENCY ($VERSION_CHANGE)"; then
+            echo "❌ Failed to approve PR"
+            exit 1
+          fi
 
-          # Enable auto-merge
-          gh pr merge --auto --squash "$PR_URL"
+          # Attempt to enable auto-merge
+          echo "🚀 Attempting to enable auto-merge..."
+          if gh pr merge --auto --squash "$PR_URL"; then
+            echo "✅ Successfully enabled auto-merge for $ACTION"
+          else
+            echo "⚠️ Auto-merge failed (likely permissions issue)"
+            echo "💡 Tip: Ensure GH_PAT_TOKEN is set with repo permissions for Dependabot PRs"
 
-          echo "✅ Enabled auto-merge for $ACTION"
+            # Fallback: Set up for manual merge
+            echo "🔄 PR has been approved and is ready for manual merge"
+            echo "action-taken=approved-ready-for-merge" >> $GITHUB_OUTPUT
+
+            # Don't exit with error - the PR is still approved
+          fi
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GH_PAT_TOKEN || secrets.GITHUB_TOKEN }}
+          TOKEN_TYPE: ${{ secrets.GH_PAT_TOKEN && 'PAT' || 'GITHUB_TOKEN' }}
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Add tracking labels
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 🏷️ Add tracking labels
         if: |
           startsWith(steps.determine-action.outputs.action, 'auto-merge-') ||
@@ -482,9 +502,9 @@ jobs:
     needs: [load-env, process-pr]
     runs-on: ubuntu-latest
     steps:
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Generate a workflow summary report
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 📊 Generate workflow summary
         env:
           ENV_JSON: ${{ needs.load-env.outputs.env-json }}
@@ -520,6 +540,9 @@ jobs:
               ;;
             "auto-merge-security")
               ACTION_DESC="🔒 Auto-merged (security update)"
+              ;;
+            "approved-ready-for-merge")
+              ACTION_DESC="✅ Approved and ready for manual merge (auto-merge failed)"
               ;;
             "alert-major")
               ACTION_DESC="⚠️ Manual review required (major update)"
@@ -564,9 +587,9 @@ jobs:
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "🤖 _Automated by GitHub Actions_" >> $GITHUB_STEP_SUMMARY
 
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       # Report final workflow status
-      # ————————————————————————————————————————————————————————————————
+      # --------------------------------------------------------------------
       - name: 📢 Report workflow status
         run: |
           echo "=== 🤖 Dependabot Auto-merge Summary ==="
@@ -578,6 +601,9 @@ jobs:
           case "$ACTION" in
             auto-merge-*)
               echo "✅ Action: Auto-merge enabled"
+              ;;
+            approved-ready-for-merge)
+              echo "✅ Action: Approved and ready for manual merge"
               ;;
             alert-*)
               echo "⚠️ Action: Alert sent, manual review required"

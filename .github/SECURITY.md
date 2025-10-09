@@ -1,6 +1,6 @@
 # 🔐 Security Policy
 
-Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-lockfree-queue**.
+Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-template**.
 
 <br/>
 
@@ -8,6 +8,7 @@ Security is a priority. We maintain a proactive stance to identify and fix vulne
 
 | Version | Status               |
 |---------|----------------------|
+| 0.x.x   | ✅ Supported & Active |
 | 1.x.x   | ✅ Supported & Active |
 
 <br/>
@@ -17,7 +18,7 @@ Security is a priority. We maintain a proactive stance to identify and fix vulne
 If you’ve found a security issue, **please don’t open a public issue or PR**.
 
 Instead, send a private email to:
-📧 [security@bsvassocation.org](mailto:security@bsvassociation.org)
+📧 [security@bsvassocation.org](mailto:security@bsvassocation.org)
 
 Include the following:
 
@@ -35,7 +36,7 @@ We welcome responsible disclosures from researchers, vendors, users, and curious
 * 📢 **Status updates** every 5 business days
 * ✅ **Resolution target** of 30 days (for confirmed vulnerabilities)
 
-Prefer encrypted comms? Let us know in your initial email—we’ll reply with our PGP public key. 
+Prefer encrypted comms? Let us know in your initial email—we’ll reply with our PGP public key.
 All official security responses are signed with it.
 
 <br/>
@@ -46,11 +47,12 @@ We regularly scan for known vulnerabilities using:
 
 * [`govulncheck`](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck): Checks Go code and dependencies for known vulnerabilities using the Go vulnerability database.
 * [`ask nancy`](https://github.com/sonatype-nexus-community/nancy): As part of our CI (see `fortress.yml`), we run [nancy](https://github.com/sonatype-nexus-community/nancy) to check Go dependencies for vulnerabilities against the OSS Index. This helps us catch issues in third-party packages early.
+* [`gitleaks`](https://github.com/gitleaks/gitleaks): Scans the repository for sensitive data or secrets that may have been accidentally committed to the codebase.
 
 Want to run these yourself?
 
 ```sh
-make govulncheck
+magex deps:audit
 # or run nancy via the CI workflow
 ```
 
@@ -72,5 +74,3 @@ To proactively protect this repository, we use several automated GitHub workflow
 - **[OpenSSF Scorecard](./workflows/scorecard.yml)**: Periodically evaluates the repository against OpenSSF Scorecard checks, providing insights and recommendations for improving supply chain security and best practices.
 
 These workflows help us identify, remediate, and prevent security issues as early as possible in the development lifecycle. For more details, see the workflow files in the [`.github/workflows/`](https://github.com/bsv-blockchain/go-lockfree-queue/tree/master/.github/workflows) directory.
-
-<br/>
