@@ -1,6 +1,6 @@
 # 🔐 Security Policy
 
-Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-template**.
+Security is a priority. We maintain a proactive stance to identify and fix vulnerabilities in **go-lockfree-queue**.
 
 <br/>
 
@@ -18,7 +18,7 @@ Security is a priority. We maintain a proactive stance to identify and fix vulne
 If you’ve found a security issue, **please don’t open a public issue or PR**.
 
 Instead, send a private email to:
-📧 [security@bsvassociation.org](mailto:security@bsvassociation.org)
+📧 [go-lockfree-queue@mrz1818.com](mailto:go-lockfree-queue@mrz1818.com)
 
 Include the following:
 
