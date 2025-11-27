@@ -2,7 +2,7 @@
 
 # 🔓&nbsp;&nbsp;go-lockfree-queue
 
-**A Lock Free Queue library for Go, providing a high-performance FIFO structure with operations to enqueue and dequeue generic values.**
+**High-performance lock-free FIFO queue for Go with generic support.**
 
 <br/>
 
